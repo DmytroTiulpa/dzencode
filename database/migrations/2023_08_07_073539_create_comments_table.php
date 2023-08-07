@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->integer('parent_id')->unsigned();
+            $table->integer('parent_id')->nullable();
             $table->string('user_name');
             $table->string('email');
             $table->string('home_page')->nullable();

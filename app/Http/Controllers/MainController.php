@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Main;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -12,7 +12,16 @@ class MainController extends Controller
      */
     public function index()
     {
-        //
+        //$comments = Comment::all();
+        $comments = Comment::with('answers')
+            ->where('parent_id', '=', null)
+            ->get();
+        //dd($comments);
+
+        return view('index', [
+            'comments' => $comments,
+            'delimiter' => 0
+        ]);
     }
 
     /**
@@ -20,21 +29,32 @@ class MainController extends Controller
      */
     public function create(Request $request)
     {
-        dd($_POST);
+        //dd($_POST);
+
+        $comment = new Comment;
+        $comment->parent_id = $request->parent_id;
+        $comment->user_name = $request->user_name;
+        $comment->email = $request->email;
+        $comment->home_page = $request->home_page;
+        $comment->comment = $request->comment;
+        $comment->save();
 
         // валидация
-        $validateFields = $request->validate([
+/*        $validateFields = $request->validate([
             'user_name' => 'required',
             'email' => 'required|email',
-            //'home_page' => 'required',
-            /*'password-confirm' => 'required'
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],*/
-        ]);
+//            'home_page' => 'required',
+//            'password-confirm' => 'required'
+//            'name' => ['required', 'string', 'max:255'],
+//            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+//            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);*/
+
+        $comments = Comment::all();
 
         return view('index', [
-            //'view' => $view
+            'comments' => $comments,
+            'delimiter' => 0
         ]);
     }
 
@@ -49,7 +69,7 @@ class MainController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Main $main)
+    public function show(Comment $main)
     {
         //
     }
@@ -57,7 +77,7 @@ class MainController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Main $main)
+    public function edit(Comment $main)
     {
         //
     }
@@ -65,7 +85,7 @@ class MainController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Main $main)
+    public function update(Request $request, Comment $main)
     {
         //
     }
@@ -73,7 +93,7 @@ class MainController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Main $main)
+    public function destroy(Comment $main)
     {
         //
     }
