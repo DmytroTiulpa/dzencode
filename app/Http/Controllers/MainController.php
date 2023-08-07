@@ -12,15 +12,32 @@ class MainController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $comments = Comment::with('answers')
             ->where('parent_id', '=', null)
             ->get();
-        //dd($comments);
+
+        if ($request->has('sorting_by') && $request->has('order')) {
+            // Параметр 'sorting_by' присутствует в запросе GET
+            echo "Есть параметр sorting_by<br>";
+            $sortingBy = $request->input('sorting_by');
+            $order = $request->input('order');
+            if ($sortingBy === 'date') {
+                echo "сортировка по дате<br>";
+                if ($order === 'asc') $sortedComments = $comments->sortBy('created_at');
+                if ($order === 'desc') $sortedComments = $comments->sortByDesc('created_at');
+            }
+        }
+
+        if (isset($sortedComments)) {
+            $allComments = $sortedComments;
+        } else {
+            $allComments = $comments;
+        }
 
         return view('index', [
-            'comments' => $comments,
+            'comments' => $allComments,
             'delimiter' => 0
         ]);
     }

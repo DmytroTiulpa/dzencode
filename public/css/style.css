@@ -10,3 +10,9 @@
     margin-right: 5px;
     cursor: pointer;
 }
+
+a, a:hover {
+    color: #5d5d5d;
+    /*font-weight: bold;*/
+    text-decoration: none;
+}

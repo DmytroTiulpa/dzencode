@@ -5,6 +5,32 @@
 @section('keywords', 'myKeyword1, myKeyword2, myKeyword3')
 
 @section('content')
+
+    {{--<div class="uk-section uk-section-small uk-section-muted">
+        <div class="uk-container uk-container-xlarge uk-margin-bottom">
+
+            <table id="example" class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>User name</th>
+                    <th>Email</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($comments as $item)
+                    <tr>
+                        <td>Tiger Nixon</td>
+                        <td>System Architect</td>
+                        <td>Edinburgh</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+
+        </div>
+    </div>--}}
+
     <div class="uk-section uk-section-small uk-section-muted" style="min-height: 100vh;">
         <div class="uk-container uk-container-xlarge uk-margin-bottom">
 
@@ -120,6 +146,13 @@
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
         //console.log("Документ загружен!");
+
+        //document.getElementById('example').DataTable();
+        $('#example').DataTable({
+            "pageLength": 25,       // Установите количество строк на странице
+            "lengthChange": false,  // Скрыть выбор количества записей
+            "searching": false,     // Скрыть строку поиска
+        });
 
         let fileInput = document.getElementById('file');
         fileInput.addEventListener("change", function() {

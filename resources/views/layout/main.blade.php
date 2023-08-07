@@ -25,12 +25,17 @@
     <script src="{{ asset('js/uikit.min.js') }}"></script>
     <script src="{{ asset('js/uikit-icons.min.js') }}"></script>
 
-    {{-- JQuery / Ajax --}}
-    {{--<script src="https://code.jquery.com/jquery-latest.js"></script>--}}
-
     {{-- My styles & scripts --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
     {{-- <script src="{{ asset('js/script.js') }}"></script>--}}
+
+    {{-- JQuery / Ajax --}}
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+
+    {{-- DataTables --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
 </head>
 <body>
 
