@@ -48,12 +48,12 @@ class MainController extends Controller
 
             if (!is_dir($upload_dir)) {
                 if (mkdir($upload_dir, 0755, true) || is_dir($upload_dir)) {
-                    echo 'Папка успешно создана.' . PHP_EOL;
+                    echo 'Папка успешно создана.<br>';
                 } else {
-                    echo 'Ошибка при создании папки.' . PHP_EOL;
+                    echo 'Ошибка при создании папки.<br>';
                 }
             } else {
-                echo 'Папка уже существует.' . PHP_EOL;
+                echo 'Папка уже существует.<br>';
             }
 
             $upload_file = $upload_dir.basename($_FILES['fileToUpload']['name']);
@@ -76,10 +76,22 @@ class MainController extends Controller
                 if ($width > $maxWidth) {
                     $image->resize($maxWidth, null, Image::FIT);
                     //$image->save('path/to/destination/image.jpg');
-                    $image->save($upload_file);
+                    //$image->save($upload_file);
+                    $image->save($upload_dir . time() . "." . $extension);
+                    Comment::where('id', '=', $comment->id)
+                        ->update([
+                            'file_name' => time() . "." . $extension,
+                            'original_file_name' => $_FILES['fileToUpload']['name'],
+                        ]);
                     echo "Изображение успешно уменьшено и сохранено.<br>";
                 } else {
-                    $image->save($upload_file);
+                    //$image->save($upload_file);
+                    $image->save($upload_dir . time() . "." . $extension);
+                    Comment::where('id', '=', $comment->id)
+                        ->update([
+                            'file_name' => time() . "." . $extension,
+                            'original_file_name' => $_FILES['fileToUpload']['name'],
+                        ]);
                     echo "Изображение не требует уменьшения.<br>";
                 }
 
@@ -87,16 +99,16 @@ class MainController extends Controller
 
             if ($extension === "txt") {
                 // Копируем файл из каталога для временного хранения файлов:
-                if (copy($_FILES['fileToUpload']['tmp_name'], $upload_file)) {
-                    echo "Файл <b>{$_FILES['fileToUpload']['name']}</b> успешно загружен на сервер" . PHP_EOL;
-//                EquipmentFiles::create([
-//                    'equipment_id' => $id,
-//                    'file_name' => $_FILES['filesToUpload']['name'][$i],
-//                    'original_file_name' => $_FILES['filesToUpload']['name'][$i],
-//                ]);
-                    die();
+                //if (copy($_FILES['fileToUpload']['tmp_name'], $upload_file)) {
+                if (copy($_FILES['fileToUpload']['tmp_name'], $upload_dir . time() . "." . $extension)) {
+                    echo "Файл <b>{$_FILES['fileToUpload']['name']}</b> успешно загружен на сервер.<br>";
+                    Comment::where('id', '=', $comment->id)
+                        ->update([
+                            'file_name' => time() . "." . $extension,
+                            'original_file_name' => $_FILES['fileToUpload']['name'],
+                        ]);
                 } else {
-                    echo "<h3>Ошибка! Не удалось загрузить файл <b>{$_FILES['fileToUpload']['name']}</b> на сервер!</h3>" . PHP_EOL;
+                    echo "Ошибка! Не удалось загрузить файл <b>{$_FILES['fileToUpload']['name']}</b> на сервер!<br>";
                     exit;
                 }
 
@@ -119,10 +131,15 @@ class MainController extends Controller
             ->where('parent_id', '=', null)
             ->get();
 
-        return view('index', [
+        /*return view('index', [
             'comments' => $comments,
             'delimiter' => 0
-        ]);
+        ]);*/
+
+        return redirect()->to(route('index', [
+            'comments' => $comments,
+            //'delimiter' => 0
+        ]));
     }
 
     /**

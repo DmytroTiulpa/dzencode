@@ -28,6 +28,22 @@
                 );
             @endphp
             <p>{!! $formattedComment !!}</p>
+
+            @if($item->file_name !== null && $item->original_file_name !== null)
+                @if(pathinfo($item->original_file_name, PATHINFO_EXTENSION) === 'txt')
+                    Загруженный файл: <a class="" target="_blank" href="{{ asset('/storage/'.$item->file_name) }}">{{ $item->original_file_name }}</a>
+                @endif
+
+                @if(pathinfo($item->original_file_name, PATHINFO_EXTENSION) === 'jpg' ||
+                    pathinfo($item->original_file_name, PATHINFO_EXTENSION) === 'jpeg' ||
+                    pathinfo($item->original_file_name, PATHINFO_EXTENSION) === 'png' ||
+                    pathinfo($item->original_file_name, PATHINFO_EXTENSION) === 'gif' )
+                    <div data-uk-lightbox>
+                        Загруженный файл: <a class="" href="{{ asset('/storage/'.$item->file_name) }}">{{ $item->original_file_name }}</a>
+                    </div>
+                @endif
+            @endif
+
         </div>
     </div>
 

@@ -10,7 +10,7 @@
 
             @php
                 //var_dump($_POST);
-                //dd($comments);
+                //dd(time());
             @endphp
 
             <a class="uk-button uk-button-secondary uk-margin-bottom" href="#modal-center" data-uk-toggle>Добавить комментарий</a>
@@ -133,29 +133,6 @@
                         fileInput.value = ""; // Очищаем поле для выбора файла
                     }
                 }
-                /*if (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/gif") {
-                    console.log('картинка');
-                    let reader = new FileReader();
-                    reader.onload = function(e) {
-                        let img = new Image();
-                        img.src = e.target.result;
-                        img.onload = function() {
-                            let maxWidth = 800;
-                            let ratio = maxWidth / img.width;
-                            let newWidth = maxWidth;
-                            let newHeight = img.height * ratio;
-
-                            canvas.width = newWidth;
-                            canvas.height = newHeight;
-                            ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-                            let resizedImageData = canvas.toDataURL("image/jpeg");
-                            // Теперь resizedImageData содержит уменьшенное изображение в формате base64
-                            // Вы можете отправить его на сервер или использовать по своему усмотрению
-                        };
-                    };
-                    reader.readAsDataURL(file);
-                }*/
             }
         });
 
