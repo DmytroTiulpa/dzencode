@@ -5,7 +5,7 @@
 @section('keywords', 'myKeyword1, myKeyword2, myKeyword3')
 
 @section('content')
-    <div class="uk-section uk-section-small uk-section-muted" style="height: 100vh;">
+    <div class="uk-section uk-section-small uk-section-muted" style="min-height: 100vh;">
         <div class="uk-container uk-container-xlarge uk-margin-bottom">
 
             @php

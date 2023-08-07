@@ -12,7 +12,6 @@ class MainController extends Controller
      */
     public function index()
     {
-        //$comments = Comment::all();
         $comments = Comment::with('answers')
             ->where('parent_id', '=', null)
             ->get();
@@ -50,7 +49,9 @@ class MainController extends Controller
 //            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);*/
 
-        $comments = Comment::all();
+        $comments = Comment::with('answers')
+            ->where('parent_id', '=', null)
+            ->get();
 
         return view('index', [
             'comments' => $comments,
