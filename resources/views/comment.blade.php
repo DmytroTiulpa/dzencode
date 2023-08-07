@@ -9,11 +9,8 @@
                 <div class="uk-width-expand">
                     <h3 class="uk-card-title uk-margin-remove-bottom">{{ $item->user_name }}</h3>
                     <p class="uk-text-meta uk-margin-remove-top">
-                        {{--<time datetime="2016-04-01T19:00">{{ date('d.m.Y H:i:s', strtotime($item->created_at)) }}</time>--}}
+                        <time datetime="{{ $item->created_at }}">{{ date('d.m.Y H:i:s', strtotime($item->created_at)) }}</time>
                     </p>
-                </div>
-                <div class="uk-width-auto">
-                    ID: {{ $item->id }}
                 </div>
                 <div class="uk-width-auto">
                     <a class="uk-button uk-button-text" href="#modal-center" data-uk-toggle

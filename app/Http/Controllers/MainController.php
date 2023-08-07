@@ -38,6 +38,44 @@ class MainController extends Controller
         $comment->comment = $request->comment;
         $comment->save();
 
+        $file = $_FILES['fileToUpload'];
+        if ($file['error'] === 0) {
+
+            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+            echo "Расширение файла: " . $extension . " " . PHP_EOL;
+
+            // Каталог, в который мы будем принимать файл:
+            $upload_dir = './storage/';
+
+            if (!is_dir($upload_dir)) {
+                if (mkdir($upload_dir, 0755, true) || is_dir($upload_dir)) {
+                    echo 'Папка успешно создана.' . PHP_EOL;
+                } else {
+                    echo 'Ошибка при создании папки.' . PHP_EOL;
+                }
+            } else {
+                echo 'Папка уже существует.' . PHP_EOL;
+            }
+
+            $upload_file = $upload_dir.basename($_FILES['fileToUpload']['name']);
+
+            // Копируем файл из каталога для временного хранения файлов:
+            if (copy($_FILES['fileToUpload']['tmp_name'], $upload_file)) {
+                echo "Файл <b>{$_FILES['fileToUpload']['name']}</b> успешно загружен на сервер" . PHP_EOL;
+//                EquipmentFiles::create([
+//                    'equipment_id' => $id,
+//                    'file_name' => $_FILES['filesToUpload']['name'][$i],
+//                    'original_file_name' => $_FILES['filesToUpload']['name'][$i],
+//                ]);
+                die();
+            } else {
+                echo "<h3>Ошибка! Не удалось загрузить файл <b>{$_FILES['fileToUpload']['name']}</b> на сервер!</h3>" . PHP_EOL;
+                exit;
+            }
+
+            dd($_FILES);
+        }
+
         // валидация
 /*        $validateFields = $request->validate([
             'user_name' => 'required',

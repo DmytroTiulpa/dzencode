@@ -21,7 +21,7 @@
 
                     <button class="uk-modal-close-default" type="button" data-uk-close></button>
 
-                    <form method="post" action="">
+                    <form id="comment_form" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
                         @csrf
                         <fieldset class="uk-fieldset">
 
@@ -48,7 +48,8 @@
                             <div class="uk-margin">
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" data-uk-icon="icon: mail"></span>
-                                    <input name="email" class="uk-input" type="text"
+                                    <input id="email" name="email"
+                                           class="uk-input" type="text"
                                            placeholder="E-mail" aria-label="E-mail"
                                            required >
                                 </div>
@@ -68,6 +69,14 @@
                                       class="uk-textarea" rows="5"
                                       placeholder="Textarea" aria-label="Textarea"
                                       required></textarea>
+                            </div>
+
+                            <div class="uk-margin" >
+                                <div data-uk-form-custom="target: true">
+                                    <input name="fileToUpload" type="file" aria-label="Custom controls" accept=".jpg, .jpeg, .png, .gif, .txt">
+                                    <input class="uk-input uk-width-1-1" type="text" placeholder="Select file" aria-label="Custom controls" disabled>
+                                </div>
+                                {{--<button class="uk-button uk-button-default">Submit</button>--}}
                             </div>
 
                             <div class="uk-margin">
@@ -98,10 +107,39 @@
         console.log("Документ загружен!");
     });
 
+    // let form = document.getElementById("comment_form");
+    // form.addEventListener("submit", (event) => {
+    //     event.preventDefault();
+    //     console.log('проверка формы');
+    //
+    //     let email = document.getElementById('email').value;
+    //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //
+    //     console.log(emailPattern.test(email));
+    //
+    // });
+
     function answer(messageId) {
         console.log('ответить на сообщение ' + messageId);
         document.getElementById('message_id').value = messageId;
         //const modal = document.getElementById("modal-center");
     }
+
+    function validateForm() {
+        console.log('проверка формы перед отправкой');
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let email = document.getElementById("email").value;
+        console.log(emailPattern.test(email));
+
+        if (emailPattern.test(email)) {
+            return true;
+        } else {
+            document.getElementById("email").style.borderColor = "red";
+            return false;
+        }
+
+    }
+
 </script>
 @endsection
