@@ -18,9 +18,24 @@ class MainController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        dd($_POST);
+
+        // валидация
+        $validateFields = $request->validate([
+            'user_name' => 'required',
+            'email' => 'required|email',
+            //'home_page' => 'required',
+            /*'password-confirm' => 'required'
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],*/
+        ]);
+
+        return view('index', [
+            //'view' => $view
+        ]);
     }
 
     /**
