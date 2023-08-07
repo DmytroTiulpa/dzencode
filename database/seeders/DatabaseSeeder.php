@@ -18,5 +18,9 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        $this->call(CommentsTableSeeder::class);
+        $this->command->info('Таблица COMMENTS загружена данными!');
+
     }
 }
