@@ -13,7 +13,7 @@
                 //dd($comments);
             @endphp
 
-            <a class="uk-button uk-button-secondary uk-margin-bottom" href="#modal-center" data-uk-toggle>Добавить коментарий</a>
+            <a class="uk-button uk-button-secondary uk-margin-bottom" href="#modal-center" data-uk-toggle>Добавить комментарий</a>
 
             {{-- modal form --}}
             <div id="modal-center" class="uk-flex-top" data-uk-modal>
@@ -64,8 +64,22 @@
                                 </div>
                             </div>
 
+                            {{--<div class="uk-margin" id="formatting-buttons">
+                                <a class="uk-button uk-button-primary" onclick="formatText('i')">[i]</a>
+                                <a class="uk-button uk-button-primary" onclick="formatText('strong')">[strong]</a>
+                                <a class="uk-button uk-button-primary" onclick="formatText('code')">[code]</a>
+                                <a class="uk-button uk-button-primary" onclick="insertLink()">[a]</a>
+                            </div>--}}
+
+                            <div id="formatting-buttons">
+                                <button type="button" data-tag="i">[i]</button>
+                                <button type="button" data-tag="strong">[strong]</button>
+                                <button type="button" data-tag="code">[code]</button>
+                                <button type="button" data-tag="a">[a]</button>
+                            </div>
+
                             <div class="uk-margin">
-                            <textarea name="comment"
+                            <textarea id="comment" name="comment"
                                       class="uk-textarea" rows="5"
                                       placeholder="Textarea" aria-label="Textarea"
                                       required></textarea>
@@ -73,8 +87,9 @@
 
                             <div class="uk-margin" >
                                 <div data-uk-form-custom="target: true">
-                                    <input name="fileToUpload" type="file" aria-label="Custom controls" accept=".jpg, .jpeg, .png, .gif, .txt">
-                                    <input class="uk-input uk-width-1-1" type="text" placeholder="Select file" aria-label="Custom controls" disabled>
+                                    <input id="file" name="fileToUpload" type="file" accept=".jpg, .jpeg, .png, .gif, .txt">
+                                    <input class="uk-input uk-width-expand" type="text" placeholder="Выберите файл" disabled>
+                                    <small>* Допускаются файлы jpg, jpeg, png, gif, txt</small>
                                 </div>
                                 {{--<button class="uk-button uk-button-default">Submit</button>--}}
                             </div>
@@ -104,7 +119,90 @@
 @section('js')
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
-        console.log("Документ загружен!");
+        //console.log("Документ загружен!");
+
+        let fileInput = document.getElementById('file');
+        fileInput.addEventListener("change", function() {
+            let file = fileInput.files[0];
+            //console.log(file);
+            if (file) {
+                if (file.type === "text/plain") {
+                    console.log('текстовый файл');
+                    if (file.size > 100 * 1024) {
+                        alert("Файл должен быть не больше 100 КБ.");
+                        fileInput.value = ""; // Очищаем поле для выбора файла
+                    }
+                }
+                /*if (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/gif") {
+                    console.log('картинка');
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        let img = new Image();
+                        img.src = e.target.result;
+                        img.onload = function() {
+                            let maxWidth = 800;
+                            let ratio = maxWidth / img.width;
+                            let newWidth = maxWidth;
+                            let newHeight = img.height * ratio;
+
+                            canvas.width = newWidth;
+                            canvas.height = newHeight;
+                            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+                            let resizedImageData = canvas.toDataURL("image/jpeg");
+                            // Теперь resizedImageData содержит уменьшенное изображение в формате base64
+                            // Вы можете отправить его на сервер или использовать по своему усмотрению
+                        };
+                    };
+                    reader.readAsDataURL(file);
+                }*/
+            }
+        });
+
+        let formattingButtons = document.querySelectorAll("#formatting-buttons button");
+        let textarea = document.getElementById("comment");
+
+        formattingButtons.forEach(function(button) {
+            button.addEventListener("click", function() {
+                console.log("проверка закрытия тегов");
+                let tag = button.getAttribute("data-tag");
+                let selectedText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+                let openTag = "[" + tag + "]";
+                let closeTag = "[/" + tag + "]";
+
+                let beforeSelection = textarea.value.substring(0, textarea.selectionStart);
+                let afterSelection = textarea.value.substring(textarea.selectionEnd);
+
+                if (tag === "a") {
+                    let link = prompt("Введите URL для ссылки:", "http://");
+                    if (link !== null) {
+                        //console.log('Вставляем ссылку ' + link);
+                        let newText = "[a=" + link + "]" + selectedText + "[/a]";
+                        if (selectedText) {
+                            textarea.value = beforeSelection + newText + afterSelection;
+                        }
+                    }
+                } else {
+                    if (selectedText) {
+                        // Проверка на наличие открытого тега перед вставкой
+                        if (beforeSelection.lastIndexOf(openTag) > beforeSelection.lastIndexOf(closeTag)) {
+                            // Если есть открытый тег, закрываем его перед вставкой нового
+                            beforeSelection += closeTag;
+                        }
+                        textarea.value = beforeSelection + openTag + selectedText + closeTag + afterSelection;
+                    } else {
+                        // Проверка на наличие открытых тегов перед вставкой
+                        if (beforeSelection.lastIndexOf(openTag) > beforeSelection.lastIndexOf(closeTag)) {
+                            // Если есть открытый тег, закрываем его перед вставкой нового текста
+                            beforeSelection += closeTag;
+                        }
+                        textarea.value = beforeSelection + openTag + closeTag + afterSelection;
+                    }
+                }
+
+            });
+        });
+
     });
 
     // let form = document.getElementById("comment_form");
@@ -140,6 +238,36 @@
         }
 
     }
+
+    function formatText(tag) {
+        console.log('formatText run');
+        let textarea = document.getElementById("comment");
+        let selectedText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+
+        if (selectedText) {
+            let newText = "[" + tag + "]" + selectedText + "[/" + tag + "]";
+            let beforeSelection = textarea.value.substring(0, textarea.selectionStart);
+            let afterSelection = textarea.value.substring(textarea.selectionEnd);
+
+            textarea.value = beforeSelection + newText + afterSelection;
+        }
+    }
+
+    /*function insertLink() {
+        let link = prompt("Введите URL для ссылки:", "http://");
+        if (link !== null) {
+            let textarea = document.getElementById("comment");
+            let selectedText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+
+            if (selectedText) {
+                let newText = "[a=" + link + "]" + selectedText + "[/a]";
+                let beforeSelection = textarea.value.substring(0, textarea.selectionStart);
+                let afterSelection = textarea.value.substring(textarea.selectionEnd);
+
+                textarea.value = beforeSelection + newText + afterSelection;
+            }
+        }
+    }*/
 
 </script>
 @endsection

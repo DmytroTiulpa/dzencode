@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+//use Image;
+use Nette\Utils\Image;
 
 class MainController extends Controller
 {
@@ -32,17 +34,14 @@ class MainController extends Controller
 
         $comment = new Comment;
         $comment->parent_id = $request->parent_id;
-        $comment->user_name = $request->user_name;
-        $comment->email = $request->email;
-        $comment->home_page = $request->home_page;
-        $comment->comment = $request->comment;
+        $comment->user_name = strip_tags($request->user_name);
+        $comment->email = strip_tags($request->email);
+        $comment->home_page = strip_tags($request->home_page);
+        $comment->comment = strip_tags($request->comment);
         $comment->save();
 
         $file = $_FILES['fileToUpload'];
         if ($file['error'] === 0) {
-
-            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-            echo "Расширение файла: " . $extension . " " . PHP_EOL;
 
             // Каталог, в который мы будем принимать файл:
             $upload_dir = './storage/';
@@ -59,21 +58,50 @@ class MainController extends Controller
 
             $upload_file = $upload_dir.basename($_FILES['fileToUpload']['name']);
 
-            // Копируем файл из каталога для временного хранения файлов:
-            if (copy($_FILES['fileToUpload']['tmp_name'], $upload_file)) {
-                echo "Файл <b>{$_FILES['fileToUpload']['name']}</b> успешно загружен на сервер" . PHP_EOL;
+            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+            echo "Расширение файла: " . $extension . "<br>";
+
+            if ($extension === "jpg" || $extension === "jpeg" || $extension === "png" || $extension === "gif") {
+
+                //$image = Image::fromFile('path/to/image.jpg');
+                $image = Image::fromFile($_FILES['fileToUpload']['tmp_name']);
+                $width = $image->getWidth();
+                $height = $image->getHeight();
+
+                echo "Ширина изображения: " . $width . " пикселей<br>";
+                echo "Высота изображения: " . $height . " пикселей<br>";
+
+                $maxWidth = 340; // Максимальная ширина для уменьшенного изображения
+
+                if ($width > $maxWidth) {
+                    $image->resize($maxWidth, null, Image::FIT);
+                    //$image->save('path/to/destination/image.jpg');
+                    $image->save($upload_file);
+                    echo "Изображение успешно уменьшено и сохранено.<br>";
+                } else {
+                    $image->save($upload_file);
+                    echo "Изображение не требует уменьшения.<br>";
+                }
+
+            }
+
+            if ($extension === "txt") {
+                // Копируем файл из каталога для временного хранения файлов:
+                if (copy($_FILES['fileToUpload']['tmp_name'], $upload_file)) {
+                    echo "Файл <b>{$_FILES['fileToUpload']['name']}</b> успешно загружен на сервер" . PHP_EOL;
 //                EquipmentFiles::create([
 //                    'equipment_id' => $id,
 //                    'file_name' => $_FILES['filesToUpload']['name'][$i],
 //                    'original_file_name' => $_FILES['filesToUpload']['name'][$i],
 //                ]);
-                die();
-            } else {
-                echo "<h3>Ошибка! Не удалось загрузить файл <b>{$_FILES['fileToUpload']['name']}</b> на сервер!</h3>" . PHP_EOL;
-                exit;
+                    die();
+                } else {
+                    echo "<h3>Ошибка! Не удалось загрузить файл <b>{$_FILES['fileToUpload']['name']}</b> на сервер!</h3>" . PHP_EOL;
+                    exit;
+                }
+
             }
 
-            dd($_FILES);
         }
 
         // валидация
@@ -136,4 +164,5 @@ class MainController extends Controller
     {
         //
     }
+
 }

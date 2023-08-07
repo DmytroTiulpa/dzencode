@@ -19,7 +19,15 @@
             </div>
         </div>
         <div class="uk-card-body">
-            <p>{{ $item->comment }}</p>
+            @php
+                $originalComment = $item->comment;
+                $formattedComment = preg_replace(
+                    array("/\[code\]/", "/\[\/code\]/", "/\[i\]/", "/\[\/i\]/", "/\[strong\]/", "/\[\/strong\]/", "/\[a=(.*?)\]/", "/\[\/a\]/"),
+                    array("<pre>", "</pre>", "<em>", "</em>", "<strong>", "</strong>", '<a href="$1">', "</a>"),
+                    $originalComment
+                );
+            @endphp
+            <p>{!! $formattedComment !!}</p>
         </div>
     </div>
 
