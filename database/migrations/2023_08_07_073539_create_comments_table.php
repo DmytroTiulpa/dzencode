@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mains', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->integer('parent_id')->unsigned();
+            $table->string('user_name');
+            $table->string('email');
+            $table->string('home_page')->nullable();
+            $table->string('comment');
             $table->timestamps();
         });
     }
@@ -22,6 +27,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mains');
+        /*Schema::table('comments', function (Blueprint $table) {
+            //
+        });*/
+        Schema::dropIfExists('comments');
     }
 };
