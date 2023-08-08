@@ -3,16 +3,12 @@
          style="margin-left: {{ $delimiter ?? 0 }}px;">
         <div class="uk-card-header">
             <div class="uk-grid-small uk-flex-middle" data-uk-grid>
+
+
                 <div class="uk-width-auto">
-                    <img class="uk-border-circle" width="40" height="40" src="{{ asset('img/avatar.jpg') }}" alt="Avatar">
+                    <img class="uk-border-circle" width="50" height="50" src="{{ asset('img/avatar.jpg') }}" alt="Avatar">
                 </div>
-                {{--<div class="uk-width-expand">
-                    <h3 class="uk-card-title uk-margin-remove-bottom">{{ $item->user_name }}</h3>
-                    <p class="uk-text-meta uk-margin-remove-top">
-                        <time datetime="{{ $item->created_at }}">{{ date('d.m.Y H:i:s', strtotime($item->created_at)) }}</time>
-                    </p>
-                </div>--}}
-                <div class="uk-width-auto">
+                <div class="uk-width-auto" style="min-width: 400px;">
                     <h3 class="uk-card-title uk-margin-remove">
                         <b>{{ $item->user_name }}</b>
                     </h3>
@@ -30,58 +26,66 @@
                     </p>--}}
                 </div>
 
-                {{--<div class="uk-width-auto">
-                    <span>{{ date('d.m.Y', strtotime($item->created_at)) }} в {{ date('H:i', strtotime($item->created_at)) }}</span>
-                </div>--}}
-
                 <div class="uk-width-expand">
                     @if(request('sorting_by') === 'user_name' && request('order') === 'asc')
                         <a href="{{ route('index', ['sorting_by' => 'user_name', 'order' => 'desc']) }}"
                            class="uk-icon-button uk-margin-small-right {{ $item->parent_id !== null ? 'uk-disabled' : '' }}"
-                           data-uk-icon="user"></a>
+                           data-uk-icon="user"
+                           data-uk-tooltip="Сортировать по имени пользователя"></a>
                     @elseif(request('sorting_by') === 'user_name' && request('order') === 'desc')
                         <a href="{{ route('index', ['sorting_by' => 'user_name', 'order' => 'asc']) }}"
                            class="uk-icon-button uk-margin-small-right {{ $item->parent_id !== null ? 'uk-disabled' : '' }}"
-                           data-uk-icon="user"></a>
+                           data-uk-icon="user"
+                           data-uk-tooltip="Сортировать по имени пользователя"></a>
                     @else
                         <a href="{{ route('index', ['sorting_by' => 'user_name', 'order' => 'asc']) }}"
                            class="uk-icon-button uk-margin-small-right {{ $item->parent_id !== null ? 'uk-disabled' : '' }}"
-                           data-uk-icon="user"></a>
+                           data-uk-icon="user"
+                           data-uk-tooltip="Сортировать по имени пользователя"></a>
                     @endif
 
                     @if(request('sorting_by') === 'email' && request('order') === 'asc')
                         <a href="{{ route('index', ['sorting_by' => 'email', 'order' => 'desc']) }}"
                            class="uk-icon-button uk-margin-small-right {{ $item->parent_id !== null ? 'uk-disabled' : '' }}"
-                           data-uk-icon="mail"></a>
+                           data-uk-icon="mail"
+                           data-uk-tooltip="Сортировать по E-mail"></a>
                     @elseif(request('sorting_by') === 'email' && request('order') === 'desc')
                         <a href="{{ route('index', ['sorting_by' => 'email', 'order' => 'asc']) }}"
                            class="uk-icon-button uk-margin-small-right {{ $item->parent_id !== null ? 'uk-disabled' : '' }}"
-                           data-uk-icon="mail"></a>
+                           data-uk-icon="mail"
+                           data-uk-tooltip="Сортировать по E-mail"></a>
                     @else
                         <a href="{{ route('index', ['sorting_by' => 'email', 'order' => 'desc']) }}"
                            class="uk-icon-button uk-margin-small-right {{ $item->parent_id !== null ? 'uk-disabled' : '' }}"
-                           data-uk-icon="mail"></a>
+                           data-uk-icon="mail"
+                           data-uk-tooltip="Сортировать по E-mail"></a>
                     @endif
 
                     @if(request('sorting_by') === 'created_at' && request('order') === 'asc')
                         <a href="{{ route('index', ['sorting_by' => 'created_at', 'order' => 'desc']) }}"
                            class="uk-icon-button uk-margin-small-right {{ $item->parent_id !== null ? 'uk-disabled' : '' }}"
-                           data-uk-icon="clock"></a>
+                           data-uk-icon="clock"
+                           data-uk-tooltip="Сортировать по дате добавления комментария"></a>
                     @elseif(request('sorting_by') === 'created_at' && request('order') === 'desc')
                         <a href="{{ route('index', ['sorting_by' => 'created_at', 'order' => 'asc']) }}"
                            class="uk-icon-button uk-margin-small-right {{ $item->parent_id !== null ? 'uk-disabled' : '' }}"
-                           data-uk-icon="clock"></a>
+                           data-uk-icon="clock"
+                           data-uk-tooltip="Сортировать по дате добавления комментария"></a>
                     @else
                         <a href="{{ route('index', ['sorting_by' => 'created_at', 'order' => 'asc']) }}"
                            class="uk-icon-button uk-margin-small-right {{ $item->parent_id !== null ? 'uk-disabled' : '' }}"
-                           data-uk-icon="clock"></a>
+                           data-uk-icon="clock"
+                           data-uk-tooltip="Сортировать по дате добавления комментария"></a>
                     @endif
                 </div>
 
                 <div class="uk-width-auto">
-                    <a class="uk-button uk-button-text" href="#modal-center" data-uk-toggle
-                       onclick="answer({{ $item->id }})">Ответить</a>
+                    <a class="uk-icon-button" href="#modal-center" data-uk-toggle
+                       onclick="answer({{ $item->id }})"
+                       data-uk-icon="comment"
+                       data-uk-tooltip="ОТВЕТИТЬ НА КОММЕНТАРИЙ"></a>
                 </div>
+
             </div>
         </div>
         <div class="uk-card-body">

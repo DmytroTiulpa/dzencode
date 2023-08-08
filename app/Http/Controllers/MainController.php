@@ -22,6 +22,8 @@ class MainController extends Controller
             $sortingBy = $request->input('sorting_by');
             $order = $request->input('order');
             $comments = $comments->orderBy($sortingBy, $order);
+        } else {
+            $comments = $comments->orderBy('created_at', 'desc');
         }
 
         $comments = $comments->paginate(25);
