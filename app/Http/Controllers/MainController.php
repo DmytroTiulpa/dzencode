@@ -15,31 +15,18 @@ class MainController extends Controller
     public function index(Request $request)
     {
         $comments = Comment::with('answers')
-            ->where('parent_id', '=', null)
-            ->get();
+            ->where('parent_id', '=', null);
 
+        // sorting
         if ($request->has('sorting_by') && $request->has('order')) {
-            // Параметр 'sorting_by' присутствует в запросе GET
-            echo "Есть параметр sorting_by<br>";
             $sortingBy = $request->input('sorting_by');
             $order = $request->input('order');
-            if ($sortingBy === 'date') {
-                echo "сортировка по дате<br>";
-                if ($order === 'asc') $sortedComments = $comments->sortBy('created_at');
-                if ($order === 'desc') $sortedComments = $comments->sortByDesc('created_at');
-            }
+            $comments = $comments->orderBy($sortingBy, $order);
         }
 
-        if (isset($sortedComments)) {
-            $allComments = $sortedComments;
-        } else {
-            $allComments = $comments;
-        }
+        $comments = $comments->paginate(25);
 
-        return view('index', [
-            'comments' => $allComments,
-            'delimiter' => 0
-        ]);
+        return view('index', compact('comments'));
     }
 
     /**

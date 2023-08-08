@@ -138,6 +138,8 @@
             @include('comment')
             {{--@endforeach--}}
 
+            {{ $comments->links() }}
+
         </div>
     </div>
 @endsection

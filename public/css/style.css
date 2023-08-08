@@ -11,8 +11,11 @@
     cursor: pointer;
 }
 
-a, a:hover {
+/*a, a:hover {
     color: #5d5d5d;
-    /*font-weight: bold;*/
+    font-weight: bold;
     text-decoration: none;
+}*/
+svg.w-5.h-5 {
+    height: 1em;
 }
